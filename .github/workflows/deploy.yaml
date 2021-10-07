@@ -1,0 +1,24 @@
+name: CI for next-js
+
+on:
+  push:
+    branches: [production] ## can multiple branch if in array
+
+  jobs:
+    deploy-production:
+      name: Deploying to production
+      runs-on: ubuntu-latest
+      if: github.ref == 'refs/heads/production' ## check if current ref is production
+      steps:
+        - name: Checkout latest code from GH
+          uses: actions/checkout@v2 ## use existing GH actions for checkout
+        - name: Rsync to production server
+          uses: easingthemes/ssh-deploy@main
+          env:
+            SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+            ARGS: "-rltgoDzvO"
+            SOURCE: "/"
+            REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+            REMOTE_USER: ${{ secrets.REMOTE_USER }}
+            TARGET: ~/nodejs/nextjs/
+            EXCLUDE: "/dist/, /node_modules/"
