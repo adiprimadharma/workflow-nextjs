@@ -20,5 +20,18 @@ jobs:
           SOURCE: "/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: ~/nodejs/nextjs/
+          TARGET: ${{ secrets.SERVER_DIR_TARGET }}
           EXCLUDE: "/dist/, /node_modules/"
+      - name: Run npm install, build and reload pm2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            whoami
+            cd ~/nodejs/nextjs
+            npm install
+            npm run build --if-present
+            pm2 reload next-js
