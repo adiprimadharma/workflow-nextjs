@@ -7,13 +7,13 @@ on:
 jobs:
   deploy-production:
     name: Deploying to production
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest ## run on ubuntu environtment in Github Workspace
     if: github.ref == 'refs/heads/production' ## check if current ref is production
     steps:
       - name: Checkout latest code from GH
         uses: actions/checkout@v2 ## use existing GH actions for checkout
       - name: Rsync to production server
-        uses: easingthemes/ssh-deploy@main
+        uses: easingthemes/ssh-deploy@main ## use existing ssh deploy actions (ssh and rsync deployment)
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
           ARGS: "-rltgoDzvO"
@@ -23,7 +23,7 @@ jobs:
           TARGET: ${{ secrets.SERVER_DIR_TARGET }}
           EXCLUDE: "/dist/, /node_modules/"
       - name: Run npm install, build and reload pm2
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@master ## use ssh actions to run command in server
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
