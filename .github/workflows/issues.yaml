@@ -10,6 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: run bash commands
-        run: |
-          pwd
-          ls -ll
+        run: echo "hello guys"
+      - name: comment to new issues
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
+      - name: View context attributes
+        uses: actions/github-script@v5
+        with:
+          script: console.log(context)
