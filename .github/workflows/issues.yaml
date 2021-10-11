@@ -1,0 +1,15 @@
+name: Say Hello Guys When Issues Opened
+
+on:
+  issues:
+    types: [opened]
+  
+jobs:
+  run-commands:
+    name: issue has been opened
+    runs-on: ubuntu-latest
+    steps:
+      - name: run bash commands
+        run: |
+          pwd
+          ls -ll
